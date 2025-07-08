@@ -1,5 +1,7 @@
 plugins {
-    id("java")
+    application
+    java
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
@@ -19,3 +21,20 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+application {
+    mainClass.set("org.example.Main") // ← change this
+}
+
+//tasks.jar {
+//    manifest {
+//        attributes["Main-Class"] = "org.example.Main"
+//    }
+
+//    // Include dependencies in the JAR (fat JAR / uber JAR)
+//    from({
+//        configurations.runtimeClasspath.get().filter { it.exists() }.map {
+//            if (it.isDirectory) it else zipTree(it)
+//        }
+//    })
+//}

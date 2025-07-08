@@ -7,14 +7,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileHandler {
-    private final String filePath = "./src/main/resources/data/tasks.json";
+    private final String filePath = "./task_tracker_cli/tasks.json";
 
     public FileHandler(){
         try {
             File dataFile = new File(filePath);
-            System.out.println(dataFile.getAbsolutePath());
-            if(!dataFile.exists()){
-                createFile(dataFile);
+            if(!dataFile.exists()) {
+                File dir = dataFile.getParentFile();
+                if (dir.mkdir()) {
+                    createFile(dataFile);
+//                    System.out.println("Directory created: " + dataFile.getName());
+                } else {
+                    error(new Exception("Failed to create directory"));
+                }
             }
         } catch (Exception e) {
             error(e);
@@ -24,7 +29,7 @@ public class FileHandler {
     private void createFile(File dataFile) {
         try {
             if (dataFile.createNewFile()) {
-                System.out.println("File created: " + dataFile.getName());
+//                System.out.println("File created: " + dataFile.getName());
                 FileWriter fileWriter = new FileWriter(dataFile);
                 fileWriter.write("[\n\n]");
                 fileWriter.close();

@@ -1,6 +1,11 @@
 ### A simple task tracker
 
-commands:
+## How to use
+1. download the task_tracker_cli.jar
+2. open a terminal and go to the directory of the task_tracker_cli.jar 
+3. run `java -jar task_tracker_cli.jar`
+
+## Commands:
     add
         add (description)
         add Buy coffee

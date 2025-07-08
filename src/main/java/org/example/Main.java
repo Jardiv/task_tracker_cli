@@ -4,6 +4,7 @@ import org.example.models.DataHandler;
 import org.example.models.Task;
 import static org.example.utils.ForegroundColors.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -94,7 +95,7 @@ public class Main {
         if(isAdded){
             System.out.println(ANSI_GREEN + "Task added" + ANSI_RESET);
         } else {
-            System.out.println(ANSI_RED + "Task not added" + ANSI_RESET);
+            System.out.println(ANSI_RED + "Task unable to add" + ANSI_RESET);
         }
     }
 
@@ -118,7 +119,8 @@ public class Main {
         status = status.toUpperCase().charAt(0) + status.substring(1);
         System.out.println(ANSI_GREEN + status + " tasks: " + ANSI_RESET);
         if(tasks.isEmpty()){
-            System.out.println(ANSI_RED + "No tasks found" + ANSI_RESET);
+            String msg = status.equals("All") ? "No tasks found" : "No " + status + " tasks found";
+            System.out.println(ANSI_PURPLE + msg + ANSI_RESET);
         } else {
             for (Task task : tasks) {
                 System.out.println(task.toString());
@@ -165,7 +167,7 @@ public class Main {
             }
 
             dataHandler.deleteTask(task);
-            deleteMsg = ANSI_GREEN + "Task deleted" + ANSI_RESET + "\nid: " + task.getId();
+            deleteMsg = ANSI_GREEN + "Task deleted" + ANSI_RESET;
         }
         System.out.println(deleteMsg);
     }
@@ -188,8 +190,17 @@ public class Main {
     }
 
     public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+
+        try {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {
+            System.out.println("Unable to clear screen: " + ex.getMessage());
+        }
+
     }
+
 
 }
